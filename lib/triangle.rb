@@ -1,28 +1,36 @@
+require 'pry'
+
 class Triangle
-  # write code here
-	attr_reader :side1, :side2, :side3
-	def initialize(side1, side2, side3)
-		@side1 = side1
-		@side2 = side2
-		@side3 = side3
-		if @side1 <= 0 || @side2 <= 0 || @side3 <= 0
-			raise TriangleError
-		end
-		if @side1 >= (@side2 + @side3) || @side2 >= (@side1 + @side3) || @side3 >= (@side1 + @side2)
-       raise TriangleError
+  attr_accessor :side_a, :side_b, :side_c
+
+  def initialize(side_a,side_b,side_c)
+    @side_a = side_a
+    @side_b = side_b
+    @side_c = side_c
+  end
+
+  def greater_than_zero?
+    @side_a > 0 && @side_b > 0 && @side_c > 0
+  end
+
+  def fulfill_inequality_theorem?
+    (@side_a + @side_b) > @side_c  && (@side_a + @side_c) > @side_b && (@side_b + @side_c) > @side_a
+  end
+
+  def kind
+    if self.greater_than_zero? == false || self.fulfill_inequality_theorem? == false
+      raise TriangleError
+    else
+      if side_a * 3 == side_a + side_b + side_c
+        return :equilateral
+      elsif side_a != side_b && side_a != side_c && side_b != side_c
+        return :scalene
+      else
+        return :isosceles
+      end
     end
-	end
-	def kind
-		if @side1 == @side2 && @side2 == @side3 && @side3 == @side1
-			return :equilateral
-		elsif @side1 == @side2 || @side2 == @side3 || @side3 == @side1
-			return :isosceles
-		else
-			return :scalene
-		end
-	end
-end
+  end
 
-class TriangleError < StandardError
-
+  class TriangleError < StandardError
+  end
 end
